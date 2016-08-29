@@ -1,20 +1,26 @@
 path = require 'path'
-{$, $$$, View, TextEditorView} = require 'atom-space-pen-views'
+# {$, $$$, View, TextEditorView} = require 'atom-space-pen-views'
 {CompositeDisposable} = require 'atom'
 
 module.exports =
-class FindListView extends View 
+class FindListView 
   fnrAPI : null
   
   constructor: () ->
     console.log "find list view created"
     @subscriptions = new CompositeDisposable
+    # Create root element
+    @element = document.createElement('div')
+    @element.classList.add('find-list')
+    @ord_list = document.createElement('ol')
+    @element.appendChild(@ord_list)
     
-  #   # Create root element
-  #   @element = document.createElement('div')
-  #   @element.classList.add('find-list')
-  # 
-  #   # Create message element
+    marker_li = document.createElement('li')
+    marker_li.textContent = "found some text"
+    @ord_list.appendChild(marker_li)
+
+    
+    # Create message element
   #   message = document.createElement('div')
   #   message.textContent = "The FindList package is Alive! It's ALIVE!"
   #   message.classList.add('message')
@@ -37,6 +43,10 @@ class FindListView extends View
           highlight = editor.getTextInBufferRange([start_pnt, end_pnt])
           line = editor.lineTextForBufferRow(start_pnt.row)
           console.log start_pnt.row+1 + " " + line
+          # marker_li = document.createElement('li')
+          # marker_li.textContent = start_pnt.row+1 + " " + line
+          # @ord_list.appendChild(marker_li)
+          
         # editorElement = atom.views.getView(editor)
         # console.log editorElement
       else
@@ -46,8 +56,8 @@ class FindListView extends View
     
   # Tear down any state and detach
   destroy: ->
-    # @element.remove()
+    @element.remove()
     super
   # 
-  # getElement: ->
-  #   @element
+  getElement: ->
+    @element

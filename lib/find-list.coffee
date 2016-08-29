@@ -10,8 +10,11 @@ module.exports = FindList =
   activate: (state) ->
     @subscriptions = new CompositeDisposable
     @findListView ||= new FindListView
+    @FindListView = new FindListView()
+    @bottomPanel = atom.workspace.addBottomPanel(item: @FindListView.getElement(), visible: false, priority: 110)
+    @subscriptions.add atom.commands.add 'atom-workspace', 'find-list:toggle': => @toggle()
     @activatePlugin()
-    
+
   deactivate: ->
     @subscriptions.dispose()
     @findListView.destroy()
@@ -55,7 +58,9 @@ module.exports = FindList =
   # serialize: ->
     # findListViewState: @findListView.serialize()
 
-  # toggle: ->
-  #   console.log 'FindList was toggled!'
-  # 
-  #   else
+  toggle: ->
+    if @bottomPanel.isVisible()
+      @bottomPanel.hide()
+    else
+      @bottomPanel.show()
+    

@@ -1,12 +1,17 @@
 {CompositeDisposable} = require 'atom'
 FindAndReplace = null
+FindListView = require './find-list-view'
 
 module.exports =
 class FindBinding
-  constructor: (@fnrAPI) ->
+  FindListView: null
+  bottomPanel: null
+  
+  constructor: (@fnrAPI) ->    
     @subscriptions = new CompositeDisposable
     @decorationsByMarkerId = {}
     @subscriptionsByMarkerId = {}
+
     if not @editor = atom.workspace.getActiveTextEditor()
       console.log "no editor"
     
@@ -52,7 +57,7 @@ class FindBinding
   handleCreatedMarker: (marker) ->
     if @fnrAPI? or marker.getProperties()?.class is 'find-result'
       @createDecoration(marker)
-
+  
   createDecoration: (marker) ->
     console.log "create decoration"
     console.log marker
