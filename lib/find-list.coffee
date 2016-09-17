@@ -4,63 +4,65 @@ FindListView = require './find-list-view'
 module.exports = FindList =
   findListView: null
   subscriptions: null
-  findPanel: null
-  active: false
+  editor_subscription: null
   
   activate: (state) ->
     @subscriptions = new CompositeDisposable
-    @findListView ||= new FindListView
-    @FindListView = new FindListView()
-    @bottomPanel = atom.workspace.addBottomPanel(item: @FindListView.getElement(), visible: false, priority: 110)
-    @subscriptions.add atom.commands.add 'atom-workspace', 'find-list:toggle': => @toggle()
-    @activatePlugin()
-
-  deactivate: ->
-    @subscriptions.dispose()
-    @findListView.destroy()
-
-  activatePlugin: ->
-    return if @active
-
-    @active = true
-
+    @findListView = new FindListView
     fnrVersion = atom.packages.getLoadedPackage('find-and-replace').metadata.version
     fnrHasServiceAPI = parseFloat(fnrVersion) >= 0.194
-
+    
     if fnrHasServiceAPI
-      @initializeServiceAPI()
+      atom.packages.serviceHub.consume 'find-and-replace', '0.0.1', (fnr) =>
+        @findListView.fnrAPI = fnr
     else
       console.log "legacy api not supported"
-    #   @initializeLegacyAPI()
 
     @subscriptions.add atom.commands.add 'atom-workspace',
-      'find-and-replace:show': => @discoverMarkers()
-      'find-and-replace:toggle': => @discoverMarkers()
-      'find-and-replace:show-replace': => @discoverMarkers()
-      'core:cancel': => @clearBindings()
-      'core:close': => @clearBindings()
-
-  initializeServiceAPI: ->
-    atom.packages.serviceHub.consume 'find-and-replace', '0.0.1', (fnr) =>
-      console.log "consume find and replace"
-      console.log fnr
-      console.log @findListView
-      @findListView.fnrAPI = fnr
+      'find-and-replace:show': => @showFind()
+      'find-and-replace:toggle': => @toggle()
+      'find-and-replace:show-replace': => @showFind()
+      'core:cancel': => @clearFinds()
+      'core:close': => @clearFinds()
   
-  discoverMarkers: ->
-    # binding.discoverMarkers() for id,binding of @bindingsById
-    console.log "discover markers"
-    @findListView.discoverMarkers()
+  deactivate: ->
+    @subscriptions.dispose()
+    @editor_subscription.dispose()
+    @findListView.destroy()
+
+  showFind: ->
+    @newEditor()
+    @findListView.show()
+
+  newEditor: ->
+    if @editor_subscription
+      @editor_subscription.dispose()
     
-  clearBindings: ->
-    console.log "clear bindings"
+    @editor_subscription = atom.workspace.onDidStopChangingActivePaneItem (paneItem) =>
+      @newEditor()
+    if editor = atom.workspace.getActiveTextEditor()
+      @findListView.newEditor(editor)
+  
+  discoverFinds: ->
+    if @findListView
+      @findListView.discoverFinds()
+      if not @findListView.isVisible()
+        @findListView.show()
+
+    
+  clearFinds: ->
+    @findListView.clearFinds()
+    if @findListView.isVisible()
+      @findListView.hide()
 
   # serialize: ->
     # findListViewState: @findListView.serialize()
 
   toggle: ->
-    if @bottomPanel.isVisible()
-      @bottomPanel.hide()
+    if @findListView.isVisible()
+      @findListView.hide()
     else
-      @bottomPanel.show()
+      @newEditor()
+      @findListView.show()
     
+  

@@ -4,5 +4,34 @@
 // for a full listing of what's available.
 @import "ui-variables";
 
-.find-list {
+.find-list{
+  
+  .toggle-button{
+    padding: 0;
+    background-color: inherit;
+  }
+  
+  .list-group{
+    max-height: 140px !important;
+    font-family: Inconsolata, Monaco, Consolas, 'Courier New', Courier;
+    margin-top: 0 !important;
+    
+    li {
+      line-height: 1.8em;
+    }
+    
+    .matchedText{
+      // border: 1px solid @syntax-result-marker-color;
+      border: 2px solid white;
+    }
+    
+    .lineNumber{
+      color: @text-color;
+      font-weight: bold;
+      float: left;
+      width: 3em;
+      padding-left: 10px;
+      padding-right: 5px;
+    }
+  }
 }

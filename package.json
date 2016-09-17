@@ -4,7 +4,7 @@
   "version": "0.0.0",
   "description": "Shows all lines of find results",
   "keywords": [],
-  "repository": "https://github.com/atom/find-list",
+  "repository": "https://github.com/jfrogget/find-list",
   "license": "MIT",
   "engines": {
     "atom": ">=1.0.0 <2.0.0"
