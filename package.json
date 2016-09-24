@@ -1,7 +1,7 @@
 {
   "name": "find-list",
   "main": "./lib/find-list",
-  "version": "0.0.0",
+  "version": "0.1.0",
   "description": "Shows all lines of find results",
   "keywords": [],
   "repository": "https://github.com/jfrogget/find-list",
@@ -10,13 +10,13 @@
     "atom": ">=1.0.0 <2.0.0"
   },
   "dependencies": {
-   "atom-space-pen-views": "^2.1.0"
- },
- "activationCommands": {
-   "atom-workspace": [
-     "find-and-replace:show",
-     "find-and-replace:toggle",
-     "find-and-replace:show-replace"
-   ]
- }
+    "atom-space-pen-views": "^2.1.0"
+  },
+  "activationCommands": {
+    "atom-workspace": [
+      "find-and-replace:show",
+      "find-and-replace:toggle",
+      "find-and-replace:show-replace"
+    ]
+  }
 }
