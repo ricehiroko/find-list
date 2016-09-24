@@ -15,6 +15,7 @@ module.exports = FindList =
     if fnrHasServiceAPI
       atom.packages.serviceHub.consume 'find-and-replace', '0.0.1', (fnr) =>
         @findListView.fnrAPI = fnr
+        @showFind()
     else
       console.log "legacy api not supported"
 
@@ -24,7 +25,7 @@ module.exports = FindList =
       'find-and-replace:show-replace': => @showFind()
       'core:cancel': => @clearFinds()
       'core:close': => @clearFinds()
-  
+    
   deactivate: ->
     @subscriptions.dispose()
     @editor_subscription.dispose()
@@ -42,20 +43,13 @@ module.exports = FindList =
       @newEditor()
     if editor = atom.workspace.getActiveTextEditor()
       @findListView.newEditor(editor)
-  
-  discoverFinds: ->
-    if @findListView
-      @findListView.discoverFinds()
-      if not @findListView.isVisible()
-        @findListView.show()
-
     
   clearFinds: ->
     @findListView.clearFinds()
     if @findListView.isVisible()
       @findListView.hide()
 
-  # serialize: ->
+  serialize: ->
     # findListViewState: @findListView.serialize()
 
   toggle: ->

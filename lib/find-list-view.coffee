@@ -24,6 +24,7 @@ class FindListView extends SelectListView
   initialize: () ->
     super
     @filterEditorView.hide()
+    @loadingArea.hide()
     @subscriptions = new CompositeDisposable
     @toggleButton.on 'click', (e) => @toggle()
     @list.attr({"padding-top": 0, margin: 0})
@@ -71,8 +72,6 @@ class FindListView extends SelectListView
   selectItemForRange: (range) ->
     for f, ii in @finds
       if range.isEqual(f.getBufferRange())
-        console.log @list
-        console.log f
         @selectItemView(@list.find("li:eq(" + ii + ")"))
 
   toggle: ->
@@ -96,3 +95,7 @@ class FindListView extends SelectListView
 
   hide: ->
     @panel?.hide()
+
+  destroy: ->
+    @subscriptions.dispose()
+    # super
