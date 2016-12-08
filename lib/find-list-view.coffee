@@ -46,8 +46,9 @@ class FindListView extends SelectListView
         @selectItemForRange(@bufferSelection)
         
   refreshFinds: () ->
-    @finds = @layer.getMarkers()
-    @setItems(@finds)
+    if @list?.isVisible()
+      @finds = @layer.getMarkers()
+      @setItems(@finds)
   
   clearFinds: () ->
     @finds = []
