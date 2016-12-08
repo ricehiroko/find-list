@@ -1,7 +1,7 @@
 {
   "name": "find-list",
   "main": "./lib/find-list",
-  "version": "0.2.0",
+  "version": "0.3.0",
   "description": "Shows all lines of find results",
   "keywords": [],
   "repository": "https://github.com/jfrogget/find-list",
